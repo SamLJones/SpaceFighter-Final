@@ -8,6 +8,7 @@ public class Songs : MonoBehaviour
 
     void Start()
     {
+        int currentSong = Random.Range(1, 4);
         audioSource = GetComponent<AudioSource>();
         PlayCurrentSong();
         audioSource.volume = 0.2f;
