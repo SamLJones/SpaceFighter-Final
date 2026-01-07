@@ -30,3 +30,5 @@ public class BulletMovement : MonoBehaviour
     }
     // Destroys the bullet on impact with any collider
 }
+
+// Script may be negligible as the shooting scripts handle the bullet instantiation, direction and speed.

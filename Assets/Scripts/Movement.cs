@@ -47,37 +47,44 @@ public class Movement : MonoBehaviour
         audioSource.volume = 0.5f;
         audioSource.pitch = 1.0f;
         audioSource.Play();
+        // Plays a constant spaceship hum on loop, which indicates the player speed.
     }
 
     void Awake()
     {
         moveAction = inputActions.FindActionMap("Player").FindAction("Move");
+        // Sets up player input actions (modern unity input system)
     }
 
     void Update()
     {
         if (isDead) return;
+        // Prevents player from interacting with the game when dead.
 
         moveInput = moveAction.ReadValue<Vector2>();
 
         float yaw = moveInput.x * turnSpeed * Time.deltaTime;
         transform.Rotate(0f, yaw, 0f, Space.Self);
+        // Uses A / D to rotate the player left and right on the Y axis.
 
         float targetRoll = moveInput.x * maxRollAngle;
         float currentRoll = playerBody.localEulerAngles.z;
         float newRoll = Mathf.SmoothDampAngle(currentRoll, targetRoll, ref rollVelocity, rollAccelTime);
         playerBody.localEulerAngles = new Vector3(0f, 0f, newRoll);
+        // When yawwing, rotates the player model, using SmoothDampAngle for a smooth transition when changing directions.
 
         float targetSpeed = defaultSpeed;
         if (moveInput.y > 0f)
             targetSpeed = Mathf.Lerp(defaultSpeed, maximumSpeed, moveInput.y);
         else if (moveInput.y < 0f)
             targetSpeed = Mathf.Lerp(defaultSpeed, minimumSpeed, -moveInput.y);
+        // Uses W / S to accelerate and decelerate the player
+        // Lerp is used to smoothly accelerate and transition between the speeds.
 
         currentSpeed = Mathf.SmoothDamp(currentSpeed, targetSpeed, ref speedVelocity, speedAccelTime);
-        wingRotation.currentSpeed = currentSpeed;
+        wingRotation.currentSpeed = currentSpeed;   // Pushes the current speed to the wing rotation script.
 
-        audioSource.pitch = 0.5f + (currentSpeed / maximumSpeed) * 1.5f;
+        audioSource.pitch = 0.5f + (currentSpeed / maximumSpeed) * 1.5f;    // Adjusts the pitch of the spaceship hum based on current speed.
     }
 
     void FixedUpdate()
@@ -86,18 +93,19 @@ public class Movement : MonoBehaviour
 
         Vector3 movement = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
         transform.position += movement * currentSpeed * Time.fixedDeltaTime;
+        // Constantly moves the player model forward on the x and z planes.
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Terrain"))
             KillPlayer();
-    }
+    }   // Kills the player on collision with terrain.
 
     private void OnTriggerEnter(Collider other)
     {
         KillPlayer();
-    }
+    }   // Kills the player when an item with a trigger collider is touched, e.g. the enemy blasters.
 
     private void KillPlayer()
     {
@@ -113,6 +121,9 @@ public class Movement : MonoBehaviour
         Instantiate(deathExplosion, transform.position, Quaternion.identity);
         AudioSource.PlayClipAtPoint(deathSound, transform.position);
         StartCoroutine(ReloadAfterDelay(1f));
+
+        // Hides the player body model, replacing it with an explosion effect
+        // Reloads the scene after a 1 second delay.
     }
 
     private IEnumerator ReloadAfterDelay(float delay)

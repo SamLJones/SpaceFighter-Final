@@ -80,21 +80,16 @@ public class Turret : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TakeDamage();
-        Debug.Log("Turret Hit");
     }
 
 
     public void TakeDamage()
     {
         Health -= 1;
-        Debug.Log($"Turret Health: {Health}");
 
         if (Health <= 0)
         {
-            Debug.Log("DESTROYING TURRET!");  // Confirm reach
             Instantiate(Explosion, transform.position, transform.rotation);
-            if (turretController != null)  // Safety
-                turretController.TurretDestroyed();
             Destroy(gameObject);
         }
     }

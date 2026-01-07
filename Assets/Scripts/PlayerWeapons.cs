@@ -27,6 +27,7 @@ public class PlayerWeapons : MonoBehaviour
     void Awake()
     {
         attackAction = inputActions.FindActionMap("Player").FindAction("Attack");
+        // Sets up player input actions for attacking
     }
 
     void Update()
@@ -38,6 +39,8 @@ public class PlayerWeapons : MonoBehaviour
             Shoot(currentGun);
             currentGun = (currentGun + 1) % guns.Length;
             nextFireTime = Time.time + fireRate;
+            // Shoots from the current gun after a cooldown.
+            // Cycles through the guns array after eachh shot
         }
     }
 
@@ -49,6 +52,7 @@ public class PlayerWeapons : MonoBehaviour
             BulletMovement bulletMovement = bullet.GetComponent<BulletMovement>();
             bulletMovement.SetDirection(guns[gunIndex].transform.forward, bulletSpeed);
             AudioSource.PlayClipAtPoint(blasterSound, guns[gunIndex].transform.position);
+            // Instantiates the bullet at the current rotation, plays a shooting sound effect
         }
     }
 }

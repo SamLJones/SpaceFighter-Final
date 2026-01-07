@@ -42,3 +42,7 @@ public class Songs : MonoBehaviour
         PlayCurrentSong();
     }
 }
+
+// The script manages background music
+// This is 3 songs, that will cycle after the last finishes playing
+// Audio resets each time scene resets, WIP to make the song consistent and continue playing.

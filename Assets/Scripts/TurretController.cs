@@ -21,3 +21,5 @@ public class TurretController : MonoBehaviour
         TurretsRemaining--;
     }
 }
+
+// Manages all the turrets, so that if they all die, player is returned to the menu.
